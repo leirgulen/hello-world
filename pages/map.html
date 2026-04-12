@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kart - Visit Hornelen</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../index.html" class="logo">Visit<span>Hornelen</span></a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="../index.html">Hjem</a></li>
+      <li><a href="articles.html">Artikler</a></li>
+      <li><a href="gallery.html">Galleri</a></li>
+      <li><a href="map.html" class="active">Kart</a></li>
+      <li><a href="events.html">Arrangementer</a></li>
+      <li><a href="booking.html">Booking</a></li>
+      <li><a href="shop.html">Nettbutikk</a></li>
+      <li><a href="../admin/index.html">Admin</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="page-header">
+  <h1>Kart</h1>
+  <p>Utforsk severdigheter, turloeyper og opplevelser i Hornelen-regionen</p>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div style="display:grid; grid-template-columns: 1fr 320px; gap:24px;">
+      <!-- Map -->
+      <div>
+        <div id="map" class="map-container" style="height:600px;"></div>
+      </div>
+      <!-- Sidebar POIs -->
+      <div class="map-sidebar" style="max-height:600px; overflow-y:auto;">
+        <h3 style="margin-bottom:16px; color:var(--primary);">Severdigheter</h3>
+        <div id="poi-list">
+          <!-- POIs loaded by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      &copy; 2026 Visit Hornelen. Alle rettigheter reservert.
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const pois = [
+  { name:"Hornelen", lat:61.884, lng:5.170, icon:"&#9968;", desc:"Europas hoyeste sjoklippe, 860 moh", cat:"Vandring" },
+  { name:"Kalvaag", lat:61.773, lng:4.991, icon:"&#9973;", desc:"Sjarmerende fiskevear med havn og butikker", cat:"Sted" },
+  { name:"Smørhamn", lat:61.823, lng:5.018, icon:"&#127961;", desc:"Historisk handelssted og kai", cat:"Kultur" },
+  { name:"Grotlesanden", lat:61.832, lng:4.920, icon:"&#127958;", desc:"Vakker sandstrand paa Bremangerlandet", cat:"Natur" },
+  { name:"Vetvika", lat:61.870, lng:5.100, icon:"&#127754;", desc:"Avsidesliggende vik med krystallklart vann", cat:"Natur" },
+  { name:"Berleporten", lat:61.860, lng:5.060, icon:"&#127748;", desc:"Naturlig sjoeport i fjellet", cat:"Natur" },
+  { name:"Bremanger Kyrkje", lat:61.790, lng:5.110, icon:"&#9962;", desc:"Middelalderkirke med rik historie", cat:"Kultur" },
+  { name:"Nykksund Fyr", lat:61.800, lng:4.950, icon:"&#128294;", desc:"Historisk fyrtaarn med panoramautsikt", cat:"Severdighet" }
+];
+
+// Init Leaflet map
+const map = L.map('map').setView([61.84, 5.05], 11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
+// Add markers
+const markers = {};
+pois.forEach(poi => {
+  const marker = L.marker([poi.lat, poi.lng]).addTo(map)
+    .bindPopup(`<strong>${poi.name}</strong><br>${poi.desc}<br><em>${poi.cat}</em>`);
+  markers[poi.name] = marker;
+});
+
+// Render sidebar
+const poiList = document.getElementById('poi-list');
+poiList.innerHTML = pois.map(poi => `
+  <div class="poi-item" onclick="flyTo(${poi.lat}, ${poi.lng}, '${poi.name}')">
+    <span class="poi-icon">${poi.icon}</span>
+    <div style="display:inline-block; vertical-align:middle;">
+      <strong>${poi.name}</strong><br>
+      <small style="color:var(--text-muted);">${poi.desc}</small>
+    </div>
+  </div>
+`).join('');
+
+function flyTo(lat, lng, name) {
+  map.flyTo([lat, lng], 14, { duration: 1 });
+  if (markers[name]) markers[name].openPopup();
+}
+</script>
+
+<style>
+@media (max-width: 768px) {
+  [style*="grid-template-columns: 1fr 320px"] {
+    grid-template-columns: 1fr !important;
+  }
+  .map-sidebar { max-height: 300px !important; }
+}
+</style>
+</body>
+</html>

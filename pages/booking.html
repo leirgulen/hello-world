@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking - Visit Hornelen</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../index.html" class="logo">Visit<span>Hornelen</span></a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="../index.html">Hjem</a></li>
+      <li><a href="articles.html">Artikler</a></li>
+      <li><a href="gallery.html">Galleri</a></li>
+      <li><a href="map.html">Kart</a></li>
+      <li><a href="events.html">Arrangementer</a></li>
+      <li><a href="booking.html" class="active">Booking</a></li>
+      <li><a href="shop.html">Nettbutikk</a></li>
+      <li><a href="../admin/index.html">Admin</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="page-header">
+  <h1>Bestill Opplevelse</h1>
+  <p>Velg blant vaare unike opplevelser i Hornelen-regionen</p>
+</div>
+
+<section class="section">
+  <div class="container">
+    <!-- Booking Options -->
+    <h2 class="section-title">Vaare Opplevelser</h2>
+    <p class="section-subtitle">Velg en opplevelse og bestill din dato</p>
+
+    <div class="grid grid-3" id="booking-options">
+      <div class="booking-option" onclick="selectBooking(this, 'hornelen-guidet')" data-id="hornelen-guidet">
+        <div style="font-size:2.5rem; margin-bottom:12px;">&#9968;</div>
+        <h3>Guidet tur til Hornelen</h3>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin:8px 0;">Erfaren guide tar deg til toppen av Europas hoeyeste sjoklippe. Inkluderer lunsj og utstyr.</p>
+        <p><strong>Varighet:</strong> 6-8 timer</p>
+        <div class="price">kr 890,-</div>
+      </div>
+
+      <div class="booking-option" onclick="selectBooking(this, 'kajakk')" data-id="kajakk">
+        <div style="font-size:2.5rem; margin-bottom:12px;">&#128675;</div>
+        <h3>Fjordkajakk Tur</h3>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin:8px 0;">Padle gjennom den vakre Bremangerfjorden. Passer for nybegynnere. Inkluderer utstyr og guide.</p>
+        <p><strong>Varighet:</strong> 3-4 timer</p>
+        <div class="price">kr 690,-</div>
+      </div>
+
+      <div class="booking-option" onclick="selectBooking(this, 'havfiske')" data-id="havfiske">
+        <div style="font-size:2.5rem; margin-bottom:12px;">&#127907;</div>
+        <h3>Havfisketur</h3>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin:8px 0;">Fisk i de rike havomraadene utenfor Bremanger. Alt utstyr inkludert. Vi tilbereder fangsten!</p>
+        <p><strong>Varighet:</strong> 5-6 timer</p>
+        <div class="price">kr 1 190,-</div>
+      </div>
+
+      <div class="booking-option" onclick="selectBooking(this, 'fuglsafari')" data-id="fuglsafari">
+        <div style="font-size:2.5rem; margin-bottom:12px;">&#129413;</div>
+        <h3>Havfuglsafari</h3>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin:8px 0;">Baattur til fuglefjellene. Se lundefugl, havsule og havorn i naturlige omgivelser.</p>
+        <p><strong>Varighet:</strong> 4 timer</p>
+        <div class="price">kr 790,-</div>
+      </div>
+
+      <div class="booking-option" onclick="selectBooking(this, 'overnatting')" data-id="overnatting">
+        <div style="font-size:2.5rem; margin-bottom:12px;">&#127968;</div>
+        <h3>Overnatting i Sjoebu</h3>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin:8px 0;">Bo i autentisk sjobu ved fjorden. Fullt utrustet med kjoekken, bad og fantastisk utsikt.</p>
+        <p><strong>Per natt</strong></p>
+        <div class="price">kr 1 490,-</div>
+      </div>
+
+      <div class="booking-option" onclick="selectBooking(this, 'matopplevelse')" data-id="matopplevelse">
+        <div style="font-size:2.5rem; margin-bottom:12px;">&#127860;</div>
+        <h3>Lokal Matopplevelse</h3>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin:8px 0;">5-retters middag med lokale raavarer. Kokken forteller historien bak hver rett.</p>
+        <p><strong>Varighet:</strong> 3 timer</p>
+        <div class="price">kr 990,-</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Booking Form -->
+<section class="section" style="background: var(--bg-white);">
+  <div class="container" style="max-width:700px;">
+    <h2 class="section-title">Bestillingsskjema</h2>
+    <div class="booking-form" id="booking-form">
+      <div id="selected-experience" style="background:var(--bg-light); padding:16px; border-radius:var(--radius); margin-bottom:20px; display:none;">
+        <strong>Valgt opplevelse:</strong> <span id="selected-name"></span> - <span id="selected-price" style="color:var(--secondary); font-weight:700;"></span>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label>Fullt Navn *</label>
+          <input type="text" class="form-control" id="book-name" placeholder="Ola Nordmann" required>
+        </div>
+        <div class="form-group">
+          <label>E-post *</label>
+          <input type="email" class="form-control" id="book-email" placeholder="ola@eksempel.no" required>
+        </div>
+      </div>
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label>Telefon</label>
+          <input type="tel" class="form-control" id="book-phone" placeholder="+47 123 45 678">
+        </div>
+        <div class="form-group">
+          <label>Antall Gjester *</label>
+          <select class="form-control" id="book-guests">
+            <option value="1">1 gjest</option>
+            <option value="2" selected>2 gjester</option>
+            <option value="3">3 gjester</option>
+            <option value="4">4 gjester</option>
+            <option value="5">5 gjester</option>
+            <option value="6">6+ gjester</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label>Oensket Dato *</label>
+          <input type="date" class="form-control" id="book-date" required>
+        </div>
+        <div class="form-group">
+          <label>Opplevelse *</label>
+          <select class="form-control" id="book-experience">
+            <option value="">Velg opplevelse...</option>
+            <option value="hornelen-guidet">Guidet tur til Hornelen - kr 890,-</option>
+            <option value="kajakk">Fjordkajakk Tur - kr 690,-</option>
+            <option value="havfiske">Havfisketur - kr 1 190,-</option>
+            <option value="fuglsafari">Havfuglsafari - kr 790,-</option>
+            <option value="overnatting">Overnatting i Sjoebu - kr 1 490,-</option>
+            <option value="matopplevelse">Lokal Matopplevelse - kr 990,-</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Spesielle Onsker / Kommentarer</label>
+        <textarea class="form-control" id="book-comments" placeholder="Allergier, spesielle behov, spoersmaal..."></textarea>
+      </div>
+      <button class="btn btn-primary" style="width:100%;" onclick="submitBooking()">Send Bestilling</button>
+    </div>
+  </div>
+</section>
+
+<!-- Confirmation Modal -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal" id="confirm-content"></div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      &copy; 2026 Visit Hornelen. Alle rettigheter reservert.
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+const prices = {
+  'hornelen-guidet': { name: 'Guidet tur til Hornelen', price: 890 },
+  'kajakk': { name: 'Fjordkajakk Tur', price: 690 },
+  'havfiske': { name: 'Havfisketur', price: 1190 },
+  'fuglsafari': { name: 'Havfuglsafari', price: 790 },
+  'overnatting': { name: 'Overnatting i Sjoebu', price: 1490 },
+  'matopplevelse': { name: 'Lokal Matopplevelse', price: 990 }
+};
+
+function selectBooking(el, id) {
+  document.querySelectorAll('.booking-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('book-experience').value = id;
+  const info = prices[id];
+  document.getElementById('selected-name').textContent = info.name;
+  document.getElementById('selected-price').textContent = `kr ${info.price.toLocaleString('no-NO')},-`;
+  document.getElementById('selected-experience').style.display = 'block';
+  document.getElementById('booking-form').scrollIntoView({ behavior: 'smooth' });
+}
+
+function submitBooking() {
+  const name = document.getElementById('book-name').value.trim();
+  const email = document.getElementById('book-email').value.trim();
+  const date = document.getElementById('book-date').value;
+  const exp = document.getElementById('book-experience').value;
+  const guests = document.getElementById('book-guests').value;
+
+  if (!name || !email || !date || !exp) {
+    alert('Vennligst fyll ut alle obligatoriske felt (*).');
+    return;
+  }
+
+  const info = prices[exp];
+  const total = info.price * parseInt(guests);
+
+  // Save booking to localStorage
+  const bookings = JSON.parse(localStorage.getItem('vh_bookings') || '[]');
+  bookings.push({
+    id: Date.now(),
+    name, email,
+    phone: document.getElementById('book-phone').value,
+    date, experience: exp,
+    experienceName: info.name,
+    guests: parseInt(guests),
+    comments: document.getElementById('book-comments').value,
+    total,
+    status: 'pending',
+    createdAt: new Date().toISOString()
+  });
+  localStorage.setItem('vh_bookings', JSON.stringify(bookings));
+
+  document.getElementById('confirm-content').innerHTML = `
+    <h2 style="color:var(--secondary);">Bestilling Mottatt!</h2>
+    <p style="margin:16px 0;">Takk for din bestilling, <strong>${name}</strong>!</p>
+    <div style="background:var(--bg-light); padding:16px; border-radius:var(--radius); margin:16px 0;">
+      <p><strong>Opplevelse:</strong> ${info.name}</p>
+      <p><strong>Dato:</strong> ${new Date(date).toLocaleDateString('no-NO', {day:'numeric',month:'long',year:'numeric'})}</p>
+      <p><strong>Antall:</strong> ${guests} gjest(er)</p>
+      <p><strong>Total:</strong> kr ${total.toLocaleString('no-NO')},-</p>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.9rem;">En bekreftelse blir sendt til <strong>${email}</strong>. Vi tar kontakt innen 24 timer.</p>
+    <div class="modal-actions">
+      <button class="btn btn-primary btn-small" onclick="document.getElementById('confirm-modal').classList.remove('active'); resetForm();">Lukk</button>
+    </div>
+  `;
+  document.getElementById('confirm-modal').classList.add('active');
+}
+
+function resetForm() {
+  document.getElementById('book-name').value = '';
+  document.getElementById('book-email').value = '';
+  document.getElementById('book-phone').value = '';
+  document.getElementById('book-date').value = '';
+  document.getElementById('book-experience').value = '';
+  document.getElementById('book-guests').value = '2';
+  document.getElementById('book-comments').value = '';
+  document.getElementById('selected-experience').style.display = 'none';
+  document.querySelectorAll('.booking-option').forEach(o => o.classList.remove('selected'));
+}
+
+document.getElementById('confirm-modal').addEventListener('click', function(e) {
+  if (e.target === this) { this.classList.remove('active'); resetForm(); }
+});
+
+// Set min date to today
+document.getElementById('book-date').min = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>

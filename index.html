@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visit Hornelen - Europas Hoyeste Sjoklippe | Bremanger, Norge</title>
+  <meta name="description" content="Opplev Hornelen, Europas hoyeste sjoklippe pa 860 moh. Vandring, fjorder, natur og kultur i Bremanger, Vestland.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">Visit<span>Hornelen</span></a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Hjem</a></li>
+      <li><a href="pages/articles.html">Artikler</a></li>
+      <li><a href="pages/gallery.html">Galleri</a></li>
+      <li><a href="pages/map.html">Kart</a></li>
+      <li><a href="pages/events.html">Arrangementer</a></li>
+      <li><a href="pages/booking.html">Booking</a></li>
+      <li><a href="pages/shop.html">Nettbutikk</a></li>
+      <li><a href="admin/index.html">Admin</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <h1>Velkommen til Hornelen</h1>
+  <p>Opplev Europas hoyeste sjoklippe pa 860 meter over havet. Fantastisk natur, fjorder og kultur i hjertet av Bremanger.</p>
+  <div class="hero-buttons">
+    <a href="pages/booking.html" class="btn btn-primary">Bestill Opplevelse</a>
+    <a href="pages/articles.html" class="btn btn-outline">Utforsk Artikler</a>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Opplev Bremanger</h2>
+    <p class="section-subtitle">Naturopplevelser, kultur og eventyr venter deg</p>
+    <div class="features">
+      <div>
+        <div class="feature-icon">&#9968;</div>
+        <h3>Vandring</h3>
+        <p>Spektakulaere turloeyper til Hornelen og langs den dramatiske kystlinjen.</p>
+      </div>
+      <div>
+        <div class="feature-icon">&#127754;</div>
+        <h3>Fjorder</h3>
+        <p>Utforsk de vakre fjordene med kajakk, bat eller fiske.</p>
+      </div>
+      <div>
+        <div class="feature-icon">&#127963;</div>
+        <h3>Kultur</h3>
+        <p>Vikingarv, lokale tradisjoner og levende kunstscene.</p>
+      </div>
+      <div>
+        <div class="feature-icon">&#127860;</div>
+        <h3>Lokal Mat</h3>
+        <p>Fersk sjomat, tradisjonelle norske retter og lokale delikatesser.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Articles -->
+<section class="section" style="background: var(--bg-white);">
+  <div class="container">
+    <h2 class="section-title">Siste Artikler</h2>
+    <p class="section-subtitle">Nyheter, tips og historier fra Hornelen-regionen</p>
+    <div class="grid grid-3" id="featured-articles">
+      <div class="card article-card">
+        <div class="card-img">&#9968;</div>
+        <div class="card-body">
+          <span class="tag">Vandring</span>
+          <h3>Turguide: Hornelen fra Hunskaar</h3>
+          <p>Den klassiske ruten til toppen av Europas hoyeste sjoklippe. Komplett guide med tips.</p>
+          <div class="card-meta">12. april 2026 &middot; 8 min lesing</div>
+        </div>
+      </div>
+      <div class="card article-card">
+        <div class="card-img">&#127754;</div>
+        <div class="card-body">
+          <span class="tag">Natur</span>
+          <h3>Skjulte Perler i Bremanger</h3>
+          <p>Oppdag de hemmelige strendene, fossene og utsiktspunktene som bare lokalbefolkningen kjenner til.</p>
+          <div class="card-meta">8. april 2026 &middot; 6 min lesing</div>
+        </div>
+      </div>
+      <div class="card article-card">
+        <div class="card-img">&#127963;</div>
+        <div class="card-body">
+          <span class="tag">Kultur</span>
+          <h3>Vikinghistorien paa Hornelen</h3>
+          <p>Legenden om heksenes samlingssted og den rike vikingarven i omraadet.</p>
+          <div class="card-meta">3. april 2026 &middot; 5 min lesing</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Upcoming Events Preview -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Kommende Arrangementer</h2>
+    <p class="section-subtitle">Hold deg oppdatert paa hva som skjer i regionen</p>
+    <div class="grid grid-2">
+      <div class="event-list-item">
+        <div class="event-date-badge">
+          <div class="day">20</div>
+          <div class="month">Apr</div>
+        </div>
+        <div>
+          <h3>Hornelen Opp</h3>
+          <span class="event-category hiking">Vandring</span>
+          <p style="margin-top:6px; color:var(--text-muted); font-size:0.9rem;">Aarlig motbakkeloep til toppen av Hornelen. Alle nivaaer velkomne.</p>
+        </div>
+      </div>
+      <div class="event-list-item">
+        <div class="event-date-badge">
+          <div class="day">1</div>
+          <div class="month">Mai</div>
+        </div>
+        <div>
+          <h3>Bremanger Matfestival</h3>
+          <span class="event-category festival">Festival</span>
+          <p style="margin-top:6px; color:var(--text-muted); font-size:0.9rem;">Smak lokal sjomat, tradisjonell mat og nyt livemusikk ved fjorden.</p>
+        </div>
+      </div>
+      <div class="event-list-item">
+        <div class="event-date-badge">
+          <div class="day">15</div>
+          <div class="month">Mai</div>
+        </div>
+        <div>
+          <h3>Fjordkajakk Workshop</h3>
+          <span class="event-category sport">Sport</span>
+          <p style="margin-top:6px; color:var(--text-muted); font-size:0.9rem;">Laer deg padleteknikk og utforsk fjordlandskapet med erfarne guider.</p>
+        </div>
+      </div>
+      <div class="event-list-item">
+        <div class="event-date-badge">
+          <div class="day">22</div>
+          <div class="month">Mai</div>
+        </div>
+        <div>
+          <h3>Kystkulturkveld</h3>
+          <span class="event-category culture">Kultur</span>
+          <p style="margin-top:6px; color:var(--text-muted); font-size:0.9rem;">Foredrag, musikk og fortellinger om kystkultur og sjofartshistorie.</p>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:30px;">
+      <a href="pages/events.html" class="btn btn-secondary">Se Alle Arrangementer</a>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Booking CTA -->
+<section class="section" style="background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; text-align: center;">
+  <div class="container">
+    <h2 style="font-size:2rem; margin-bottom:12px;">Klar for Eventyr?</h2>
+    <p style="opacity:0.9; max-width:500px; margin:0 auto 24px; font-size:1.1rem;">Bestill din neste opplevelse i Hornelen-regionen. Vandring, kajakk, overnatting og mer.</p>
+    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+      <a href="pages/booking.html" class="btn btn-primary">Bestill Naa</a>
+      <a href="pages/shop.html" class="btn btn-outline">Besok Nettbutikken</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h3>Visit Hornelen</h3>
+        <p>Din guide til Europas hoyeste sjoklippe og Bremanger-regionen. Opplev naturen, kulturen og eventyret.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Utforsk</h3>
+        <a href="pages/articles.html">Artikler</a>
+        <a href="pages/gallery.html">Bilder & Video</a>
+        <a href="pages/map.html">Kart</a>
+        <a href="pages/events.html">Arrangementer</a>
+      </div>
+      <div class="footer-col">
+        <h3>Tjenester</h3>
+        <a href="pages/booking.html">Booking</a>
+        <a href="pages/shop.html">Nettbutikk</a>
+        <a href="admin/index.html">Administrasjon</a>
+      </div>
+      <div class="footer-col">
+        <h3>Kontakt</h3>
+        <p>Bremanger Kommune<br>Vestland, Norge<br>post@visithornelen.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Visit Hornelen. Alle rettigheter reservert.
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

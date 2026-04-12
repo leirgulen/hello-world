@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arrangementer - Visit Hornelen</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../index.html" class="logo">Visit<span>Hornelen</span></a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="../index.html">Hjem</a></li>
+      <li><a href="articles.html">Artikler</a></li>
+      <li><a href="gallery.html">Galleri</a></li>
+      <li><a href="map.html">Kart</a></li>
+      <li><a href="events.html" class="active">Arrangementer</a></li>
+      <li><a href="booking.html">Booking</a></li>
+      <li><a href="shop.html">Nettbutikk</a></li>
+      <li><a href="../admin/index.html">Admin</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="page-header">
+  <h1>Arrangementer</h1>
+  <p>Kalender over aktiviteter og hendelser i Hornelen-regionen</p>
+</div>
+
+<section class="section">
+  <div class="container">
+    <!-- View toggle -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+      <div class="gallery-filters" style="margin-bottom:0;">
+        <button class="filter-btn active" data-filter="all">Alle</button>
+        <button class="filter-btn" data-filter="hiking">Vandring</button>
+        <button class="filter-btn" data-filter="culture">Kultur</button>
+        <button class="filter-btn" data-filter="festival">Festival</button>
+        <button class="filter-btn" data-filter="sport">Sport</button>
+      </div>
+      <div>
+        <button class="btn btn-small btn-secondary" id="view-calendar" onclick="setView('calendar')">Kalender</button>
+        <button class="btn btn-small btn-outline" id="view-list" style="border-color:var(--primary); color:var(--primary);" onclick="setView('list')">Liste</button>
+      </div>
+    </div>
+
+    <!-- Calendar View -->
+    <div id="calendar-view">
+      <div class="calendar-header">
+        <button class="btn btn-small btn-outline" style="border-color:var(--primary); color:var(--primary);" onclick="changeMonth(-1)">&larr; Forrige</button>
+        <h2 id="calendar-month-label" style="color:var(--primary);"></h2>
+        <button class="btn btn-small btn-outline" style="border-color:var(--primary); color:var(--primary);" onclick="changeMonth(1)">Neste &rarr;</button>
+      </div>
+      <div class="calendar-grid-week" id="calendar-grid"></div>
+    </div>
+
+    <!-- List View -->
+    <div id="list-view" style="display:none;">
+      <div id="events-list"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Event Detail Modal -->
+<div class="modal-overlay" id="event-modal">
+  <div class="modal" id="event-modal-content"></div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      &copy; 2026 Visit Hornelen. Alle rettigheter reservert.
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+const defaultEvents = [
+  { id:1, title:"Hornelen Opp", date:"2026-04-20", time:"09:00", category:"hiking", location:"Hunskaar", desc:"Aarlig motbakkeloep til toppen av Hornelen. 860 hoeydemeter paa ca 4 km. Alle nivaaer velkomne. Premieutdeling og grilling etterpaa." },
+  { id:2, title:"Bremanger Matfestival", date:"2026-05-01", time:"11:00", category:"festival", location:"Kalvaag", desc:"Smak lokal sjoemat, tradisjonell mat og nyt livemusikk ved fjorden. Over 20 matstander og underholdning for hele familien." },
+  { id:3, title:"Fjordkajakk Workshop", date:"2026-05-15", time:"10:00", category:"sport", location:"Kalvaag havn", desc:"Laer deg padleteknikk og utforsk fjordlandskapet med erfarne guider. Utstyr inkludert. Passer for nybegynnere." },
+  { id:4, title:"Kystkulturkveld", date:"2026-05-22", time:"18:00", category:"culture", location:"Bremanger Kyrkje", desc:"Foredrag, musikk og fortellinger om kystkultur og sjoefartshistorie. Inkluderer lokal servering." },
+  { id:5, title:"Fuglekikking: Havfuglsafari", date:"2026-06-05", time:"07:00", category:"hiking", location:"Kalvaag havn", desc:"Baattur langs kysten for aa se lundefugl, havsule og oeern. Ta med kikkert og kamera!" },
+  { id:6, title:"Midsommarfeiring", date:"2026-06-23", time:"17:00", category:"festival", location:"Grotlesanden", desc:"Tradisjonell midsommarfeiring paa stranden. Baal, dans, musikk og god mat. Gratis inngang." },
+  { id:7, title:"Hornelen Trail Run", date:"2026-07-12", time:"08:00", category:"sport", location:"Hunskaar", desc:"Terrengloep rundt og over Hornelen. 22 km med spektakulaer utsikt. Alle klasser." },
+  { id:8, title:"Kunstutstilling: Kystliv", date:"2026-07-20", time:"12:00", category:"culture", location:"Kalvaag galleri", desc:"Lokale kunstnere stiller ut malerier, fotografier og skulpturer inspirert av kystlivet." },
+  { id:9, title:"Havfisketur", date:"2026-08-03", time:"06:00", category:"sport", location:"Kalvaag havn", desc:"Guidet fisketur paa havet. Alt utstyr inkludert. Vi renser og tilbereder fangsten sammen!" },
+  { id:10, title:"Bremanger Kulturnatt", date:"2026-08-15", time:"16:00", category:"culture", location:"Hele Bremanger", desc:"Apen dag med musikk, teater, utstillinger og verksteder. Gratis busser mellom stedene." }
+];
+
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+let currentFilter = 'all';
+const monthNames = ['Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'];
+const dayNames = ['Man','Tir','Ons','Tor','Fre','Loer','Soen'];
+
+function getEvents() {
+  return JSON.parse(localStorage.getItem('vh_events') || 'null') || defaultEvents;
+}
+
+function renderCalendar() {
+  const events = getEvents();
+  const label = document.getElementById('calendar-month-label');
+  label.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+  const grid = document.getElementById('calendar-grid');
+  let html = dayNames.map(d => `<div class="day-header">${d}</div>`).join('');
+
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  let startDay = firstDay.getDay() - 1;
+  if (startDay < 0) startDay = 6;
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const today = new Date();
+
+  // Previous month padding
+  const prevDays = new Date(currentYear, currentMonth, 0).getDate();
+  for (let i = startDay - 1; i >= 0; i--) {
+    html += `<div class="calendar-day other-month"><div class="day-number">${prevDays - i}</div></div>`;
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dayEvents = events.filter(e => e.date === dateStr && (currentFilter === 'all' || e.category === currentFilter));
+    const isToday = d === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
+    html += `<div class="calendar-day${isToday ? ' today' : ''}">
+      <div class="day-number">${d}</div>
+      ${dayEvents.map(e => `<span class="event-dot ${e.category}" title="${e.title}" onclick="showEvent(${e.id})" style="cursor:pointer;"></span>`).join('')}
+      ${dayEvents.length > 0 ? `<div style="font-size:0.7rem; color:var(--text-muted); cursor:pointer;" onclick="showEvent(${dayEvents[0].id})">${dayEvents[0].title}</div>` : ''}
+    </div>`;
+  }
+
+  // Next month padding
+  const totalCells = startDay + daysInMonth;
+  const remaining = 7 - (totalCells % 7);
+  if (remaining < 7) {
+    for (let i = 1; i <= remaining; i++) {
+      html += `<div class="calendar-day other-month"><div class="day-number">${i}</div></div>`;
+    }
+  }
+
+  grid.innerHTML = html;
+}
+
+function renderList() {
+  const events = getEvents();
+  const filtered = currentFilter === 'all' ? events : events.filter(e => e.category === currentFilter);
+  const sorted = filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+  const list = document.getElementById('events-list');
+  list.innerHTML = sorted.map(e => {
+    const d = new Date(e.date);
+    return `<div class="event-list-item" style="cursor:pointer;" onclick="showEvent(${e.id})">
+      <div class="event-date-badge">
+        <div class="day">${d.getDate()}</div>
+        <div class="month">${monthNames[d.getMonth()].substring(0,3)}</div>
+      </div>
+      <div style="flex:1;">
+        <h3 style="margin-bottom:4px;">${e.title}</h3>
+        <span class="event-category ${e.category}">${e.category}</span>
+        <span style="color:var(--text-muted); font-size:0.85rem; margin-left:8px;">${e.time} &middot; ${e.location}</span>
+        <p style="margin-top:6px; color:var(--text-muted); font-size:0.9rem;">${e.desc.substring(0, 100)}...</p>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showEvent(id) {
+  const events = getEvents();
+  const e = events.find(ev => ev.id === id);
+  if (!e) return;
+  const d = new Date(e.date);
+  document.getElementById('event-modal-content').innerHTML = `
+    <h2>${e.title}</h2>
+    <p><strong>Dato:</strong> ${d.toLocaleDateString('no-NO', {day:'numeric',month:'long',year:'numeric'})}</p>
+    <p><strong>Tid:</strong> ${e.time}</p>
+    <p><strong>Sted:</strong> ${e.location}</p>
+    <p><strong>Kategori:</strong> <span class="event-category ${e.category}">${e.category}</span></p>
+    <p style="margin-top:16px; line-height:1.7;">${e.desc}</p>
+    <div class="modal-actions">
+      <a href="booking.html" class="btn btn-primary btn-small">Meld deg paa</a>
+      <button class="btn btn-small" style="border:2px solid var(--border);" onclick="document.getElementById('event-modal').classList.remove('active')">Lukk</button>
+    </div>
+  `;
+  document.getElementById('event-modal').classList.add('active');
+}
+
+document.getElementById('event-modal').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('active');
+});
+
+function changeMonth(dir) {
+  currentMonth += dir;
+  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  renderCalendar();
+}
+
+function setView(view) {
+  document.getElementById('calendar-view').style.display = view === 'calendar' ? 'block' : 'none';
+  document.getElementById('list-view').style.display = view === 'list' ? 'block' : 'none';
+  document.getElementById('view-calendar').className = view === 'calendar' ? 'btn btn-small btn-secondary' : 'btn btn-small btn-outline';
+  document.getElementById('view-list').className = view === 'list' ? 'btn btn-small btn-secondary' : 'btn btn-small btn-outline';
+  document.getElementById('view-calendar').style = '';
+  document.getElementById('view-list').style = '';
+  if (view === 'list') renderList();
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderCalendar();
+    renderList();
+  });
+});
+
+renderCalendar();
+</script>
+</body>
+</html>

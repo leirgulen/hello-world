@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galleri - Visit Hornelen</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../index.html" class="logo">Visit<span>Hornelen</span></a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="../index.html">Hjem</a></li>
+      <li><a href="articles.html">Artikler</a></li>
+      <li><a href="gallery.html" class="active">Galleri</a></li>
+      <li><a href="map.html">Kart</a></li>
+      <li><a href="events.html">Arrangementer</a></li>
+      <li><a href="booking.html">Booking</a></li>
+      <li><a href="shop.html">Nettbutikk</a></li>
+      <li><a href="../admin/index.html">Admin</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="page-header">
+  <h1>Bilder & Video</h1>
+  <p>Utforsk den fantastiske naturen og kulturen i Hornelen-regionen</p>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="gallery-filters">
+      <button class="filter-btn active" data-filter="all">Alle</button>
+      <button class="filter-btn" data-filter="natur">Natur</button>
+      <button class="filter-btn" data-filter="vandring">Vandring</button>
+      <button class="filter-btn" data-filter="fjord">Fjorder</button>
+      <button class="filter-btn" data-filter="kultur">Kultur</button>
+      <button class="filter-btn" data-filter="video">Video</button>
+    </div>
+
+    <div class="gallery-grid" id="gallery-grid">
+      <!-- Gallery items loaded by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+  <div class="lightbox-content" id="lightbox-content"></div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      &copy; 2026 Visit Hornelen. Alle rettigheter reservert.
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+const defaultGallery = [
+  { id:1, title:"Hornelen i solnedgang", type:"image", category:"natur", color:"#2a5298", icon:"&#127749;" },
+  { id:2, title:"Vandring mot toppen", type:"image", category:"vandring", color:"#2d8a6e", icon:"&#9968;" },
+  { id:3, title:"Bremangerfjorden", type:"image", category:"fjord", color:"#1a365d", icon:"&#127754;" },
+  { id:4, title:"Kalvaag havn", type:"image", category:"kultur", color:"#d4a843", icon:"&#9973;" },
+  { id:5, title:"Flytur over Hornelen", type:"video", category:"video", color:"#e74c3c", icon:"&#9658;" },
+  { id:6, title:"Midnattsol ved klippen", type:"image", category:"natur", color:"#f39c12", icon:"&#127773;" },
+  { id:7, title:"Kystlandskap", type:"image", category:"natur", color:"#3bb08a", icon:"&#127966;" },
+  { id:8, title:"Stien til Hornelen", type:"image", category:"vandring", color:"#8e44ad", icon:"&#128694;" },
+  { id:9, title:"Fjordpadling", type:"video", category:"video", color:"#e74c3c", icon:"&#9658;" },
+  { id:10, title:"Smørhamn", type:"image", category:"fjord", color:"#2980b9", icon:"&#127961;" },
+  { id:11, title:"Lokal kunsthaandverk", type:"image", category:"kultur", color:"#d4a843", icon:"&#127912;" },
+  { id:12, title:"Utsikt fra toppen", type:"image", category:"vandring", color:"#27ae60", icon:"&#127956;" }
+];
+
+function renderGallery(filter) {
+  const stored = JSON.parse(localStorage.getItem('vh_gallery') || 'null');
+  const items = stored || defaultGallery;
+  const grid = document.getElementById('gallery-grid');
+  const filtered = filter === 'all' ? items : items.filter(i => i.category === filter);
+  grid.innerHTML = filtered.map(item => `
+    <div class="gallery-item" onclick="openLightbox(${item.id})"
+         style="background: linear-gradient(135deg, ${item.color}, ${item.color}dd);">
+      <div style="display:flex; align-items:center; justify-content:center; height:100%; font-size:4rem; color:rgba(255,255,255,0.8);">
+        ${item.icon}
+      </div>
+      <div class="gallery-overlay">
+        <strong>${item.title}</strong><br>
+        <small>${item.type === 'video' ? 'Video' : 'Bilde'} &middot; ${item.category}</small>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openLightbox(id) {
+  const stored = JSON.parse(localStorage.getItem('vh_gallery') || 'null');
+  const items = stored || defaultGallery;
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  const lb = document.getElementById('lightbox');
+  const content = document.getElementById('lightbox-content');
+  content.innerHTML = `
+    <div style="text-align:center; color:#fff;">
+      <div style="font-size:8rem; margin-bottom:20px;">${item.icon}</div>
+      <h2>${item.title}</h2>
+      <p style="opacity:0.7; margin-top:8px;">${item.type === 'video' ? 'Video' : 'Bilde'} &middot; ${item.category}</p>
+    </div>
+  `;
+  lb.classList.add('active');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+}
+
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) closeLightbox();
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderGallery(btn.dataset.filter);
+  });
+});
+
+renderGallery('all');
+</script>
+</body>
+</html>

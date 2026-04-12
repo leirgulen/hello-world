@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Visit Hornelen</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../index.html" class="logo">Visit<span>Hornelen</span> Admin</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Tilbake til Nettsted</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <nav class="admin-sidebar">
+    <a href="#" class="active" onclick="showSection('dashboard')">Dashbord</a>
+    <a href="#" onclick="showSection('articles')">Artikler</a>
+    <a href="#" onclick="showSection('gallery')">Bilder & Video</a>
+    <a href="#" onclick="showSection('events')">Arrangementer</a>
+    <a href="#" onclick="showSection('bookings')">Bestillinger</a>
+    <a href="#" onclick="showSection('products')">Nettbutikk</a>
+    <a href="#" onclick="showSection('orders')">Ordrer</a>
+  </nav>
+
+  <main class="admin-main">
+    <!-- Dashboard -->
+    <div id="sec-dashboard" class="admin-section">
+      <h1 style="color:var(--primary); margin-bottom:24px;">Dashbord</h1>
+      <div class="admin-stats" id="stats"></div>
+      <div class="admin-card">
+        <h2>Siste Bestillinger</h2>
+        <table class="admin-table" id="recent-bookings"><thead><tr><th>Navn</th><th>Opplevelse</th><th>Dato</th><th>Status</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+
+    <!-- Articles -->
+    <div id="sec-articles" class="admin-section" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <h1 style="color:var(--primary);">Artikler</h1>
+        <button class="btn btn-primary" onclick="openArticleEditor()">Ny Artikkel</button>
+      </div>
+      <div class="admin-card">
+        <table class="admin-table" id="articles-table"><thead><tr><th>Tittel</th><th>Kategori</th><th>Dato</th><th>Handlinger</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+
+    <!-- Gallery -->
+    <div id="sec-gallery" class="admin-section" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <h1 style="color:var(--primary);">Bilder & Video</h1>
+        <button class="btn btn-primary" onclick="openMediaUpload()">Last Opp Media</button>
+      </div>
+      <div class="admin-card">
+        <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+          <div class="icon">&#128247;</div>
+          <p><strong>Klikk for aa laste opp</strong> eller dra filer hit</p>
+          <p style="color:var(--text-muted); font-size:0.85rem;">Stotter JPG, PNG, GIF, MP4, WebM</p>
+          <input type="file" id="file-input" multiple accept="image/*,video/*" style="display:none;" onchange="handleFileUpload(this)">
+        </div>
+        <div class="upload-preview" id="upload-preview"></div>
+      </div>
+      <div class="admin-card">
+        <h2>Publiserte Medier</h2>
+        <table class="admin-table" id="gallery-table"><thead><tr><th>Tittel</th><th>Type</th><th>Kategori</th><th>Handlinger</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+
+    <!-- Events -->
+    <div id="sec-events" class="admin-section" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <h1 style="color:var(--primary);">Arrangementer</h1>
+        <button class="btn btn-primary" onclick="openEventEditor()">Nytt Arrangement</button>
+      </div>
+      <div class="admin-card">
+        <table class="admin-table" id="events-table"><thead><tr><th>Tittel</th><th>Dato</th><th>Kategori</th><th>Sted</th><th>Handlinger</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+
+    <!-- Bookings -->
+    <div id="sec-bookings" class="admin-section" style="display:none;">
+      <h1 style="color:var(--primary); margin-bottom:24px;">Bestillinger</h1>
+      <div class="admin-card">
+        <table class="admin-table" id="bookings-table"><thead><tr><th>Navn</th><th>E-post</th><th>Opplevelse</th><th>Dato</th><th>Gjester</th><th>Total</th><th>Status</th><th>Handlinger</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+
+    <!-- Products -->
+    <div id="sec-products" class="admin-section" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <h1 style="color:var(--primary);">Produkter</h1>
+        <button class="btn btn-primary" onclick="openProductEditor()">Nytt Produkt</button>
+      </div>
+      <div class="admin-card">
+        <table class="admin-table" id="products-table"><thead><tr><th>Produkt</th><th>Pris</th><th>Kategori</th><th>Handlinger</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+
+    <!-- Orders -->
+    <div id="sec-orders" class="admin-section" style="display:none;">
+      <h1 style="color:var(--primary); margin-bottom:24px;">Ordrer</h1>
+      <div class="admin-card">
+        <table class="admin-table" id="orders-table"><thead><tr><th>Ordre-ID</th><th>Dato</th><th>Produkter</th><th>Total</th><th>Status</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Article Editor Modal -->
+<div class="modal-overlay" id="article-modal">
+  <div class="modal" style="max-width:800px;">
+    <h2 id="article-modal-title">Ny Artikkel</h2>
+    <div class="form-group">
+      <label>Tittel</label>
+      <input type="text" class="form-control" id="art-title" placeholder="Artikkelens tittel">
+    </div>
+    <div class="grid grid-2">
+      <div class="form-group">
+        <label>Kategori</label>
+        <select class="form-control" id="art-category">
+          <option value="vandring">Vandring</option>
+          <option value="natur">Natur</option>
+          <option value="kultur">Kultur</option>
+          <option value="mat">Mat</option>
+          <option value="tips">Tips</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Lesetid</label>
+        <input type="text" class="form-control" id="art-readtime" placeholder="5 min">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Innhold</label>
+      <div class="editor-toolbar">
+        <button onclick="execCmd('bold')"><strong>B</strong></button>
+        <button onclick="execCmd('italic')"><em>I</em></button>
+        <button onclick="execCmd('underline')"><u>U</u></button>
+        <button onclick="execCmd('insertUnorderedList')">Liste</button>
+        <button onclick="execCmd('insertOrderedList')">Nummerert</button>
+        <button onclick="execCmd('formatBlock', 'h2')">H2</button>
+        <button onclick="execCmd('formatBlock', 'h3')">H3</button>
+        <button onclick="execCmd('formatBlock', 'p')">Avsnitt</button>
+      </div>
+      <div class="editor-content" id="art-content" contenteditable="true"></div>
+    </div>
+    <input type="hidden" id="art-edit-id">
+    <div class="modal-actions">
+      <button class="btn btn-small" style="border:2px solid var(--border);" onclick="closeModal('article-modal')">Avbryt</button>
+      <button class="btn btn-primary btn-small" onclick="saveArticle()">Publiser</button>
+    </div>
+  </div>
+</div>
+
+<!-- Event Editor Modal -->
+<div class="modal-overlay" id="event-modal">
+  <div class="modal">
+    <h2 id="event-modal-title">Nytt Arrangement</h2>
+    <div class="form-group">
+      <label>Tittel</label>
+      <input type="text" class="form-control" id="evt-title">
+    </div>
+    <div class="grid grid-2">
+      <div class="form-group">
+        <label>Dato</label>
+        <input type="date" class="form-control" id="evt-date">
+      </div>
+      <div class="form-group">
+        <label>Tid</label>
+        <input type="time" class="form-control" id="evt-time">
+      </div>
+    </div>
+    <div class="grid grid-2">
+      <div class="form-group">
+        <label>Kategori</label>
+        <select class="form-control" id="evt-category">
+          <option value="hiking">Vandring</option>
+          <option value="culture">Kultur</option>
+          <option value="festival">Festival</option>
+          <option value="sport">Sport</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Sted</label>
+        <input type="text" class="form-control" id="evt-location">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Beskrivelse</label>
+      <textarea class="form-control" id="evt-desc"></textarea>
+    </div>
+    <input type="hidden" id="evt-edit-id">
+    <div class="modal-actions">
+      <button class="btn btn-small" style="border:2px solid var(--border);" onclick="closeModal('event-modal')">Avbryt</button>
+      <button class="btn btn-primary btn-small" onclick="saveEvent()">Lagre</button>
+    </div>
+  </div>
+</div>
+
+<!-- Media Upload Modal -->
+<div class="modal-overlay" id="media-modal">
+  <div class="modal">
+    <h2>Legg til Media</h2>
+    <div class="form-group">
+      <label>Tittel</label>
+      <input type="text" class="form-control" id="media-title">
+    </div>
+    <div class="grid grid-2">
+      <div class="form-group">
+        <label>Type</label>
+        <select class="form-control" id="media-type">
+          <option value="image">Bilde</option>
+          <option value="video">Video</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Kategori</label>
+        <select class="form-control" id="media-category">
+          <option value="natur">Natur</option>
+          <option value="vandring">Vandring</option>
+          <option value="fjord">Fjorder</option>
+          <option value="kultur">Kultur</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-small" style="border:2px solid var(--border);" onclick="closeModal('media-modal')">Avbryt</button>
+      <button class="btn btn-primary btn-small" onclick="saveMedia()">Publiser</button>
+    </div>
+  </div>
+</div>
+
+<!-- Product Editor Modal -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal">
+    <h2 id="product-modal-title">Nytt Produkt</h2>
+    <div class="form-group">
+      <label>Produktnavn</label>
+      <input type="text" class="form-control" id="prod-name">
+    </div>
+    <div class="grid grid-2">
+      <div class="form-group">
+        <label>Pris (kr)</label>
+        <input type="number" class="form-control" id="prod-price">
+      </div>
+      <div class="form-group">
+        <label>Kategori</label>
+        <select class="form-control" id="prod-category">
+          <option value="suvenir">Suvenirer</option>
+          <option value="mat">Lokalmat</option>
+          <option value="klaer">Klaer</option>
+          <option value="utstyr">Utstyr</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Beskrivelse</label>
+      <input type="text" class="form-control" id="prod-desc">
+    </div>
+    <input type="hidden" id="prod-edit-id">
+    <div class="modal-actions">
+      <button class="btn btn-small" style="border:2px solid var(--border);" onclick="closeModal('product-modal')">Avbryt</button>
+      <button class="btn btn-primary btn-small" onclick="saveProduct()">Lagre</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/main.js"></script>
+<script src="../js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artikler - Visit Hornelen</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../index.html" class="logo">Visit<span>Hornelen</span></a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="../index.html">Hjem</a></li>
+      <li><a href="articles.html" class="active">Artikler</a></li>
+      <li><a href="gallery.html">Galleri</a></li>
+      <li><a href="map.html">Kart</a></li>
+      <li><a href="events.html">Arrangementer</a></li>
+      <li><a href="booking.html">Booking</a></li>
+      <li><a href="shop.html">Nettbutikk</a></li>
+      <li><a href="../admin/index.html">Admin</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="page-header">
+  <h1>Artikler</h1>
+  <p>Nyheter, turguider og historier fra Hornelen-regionen</p>
+</div>
+
+<section class="section">
+  <div class="container">
+    <!-- Filter -->
+    <div class="gallery-filters" style="margin-bottom:30px;">
+      <button class="filter-btn active" data-filter="all">Alle</button>
+      <button class="filter-btn" data-filter="vandring">Vandring</button>
+      <button class="filter-btn" data-filter="natur">Natur</button>
+      <button class="filter-btn" data-filter="kultur">Kultur</button>
+      <button class="filter-btn" data-filter="mat">Mat</button>
+      <button class="filter-btn" data-filter="tips">Tips</button>
+    </div>
+
+    <div class="grid grid-3" id="articles-grid">
+      <!-- Articles loaded by JS -->
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      &copy; 2026 Visit Hornelen. Alle rettigheter reservert.
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+const defaultArticles = [
+  { id:1, title:"Turguide: Hornelen fra Hunskaar", excerpt:"Den klassiske ruten til toppen av Europas hoyeste sjoklippe. Komplett guide med tips og praktisk informasjon.", category:"vandring", date:"2026-04-12", readTime:"8 min", icon:"&#9968;" },
+  { id:2, title:"Skjulte Perler i Bremanger", excerpt:"Oppdag de hemmelige strendene, fossene og utsiktspunktene som bare lokalbefolkningen kjenner til.", category:"natur", date:"2026-04-08", readTime:"6 min", icon:"&#127754;" },
+  { id:3, title:"Vikinghistorien paa Hornelen", excerpt:"Legenden om heksenes samlingssted og den rike vikingarven i omraadet.", category:"kultur", date:"2026-04-03", readTime:"5 min", icon:"&#127963;" },
+  { id:4, title:"Beste Sjomatrestauranter", excerpt:"Guide til de beste stedene for fersk fisk, krabbe og andre havets delikatesser i Bremanger.", category:"mat", date:"2026-03-28", readTime:"4 min", icon:"&#127860;" },
+  { id:5, title:"Pakkeliste for Hornelen-turen", excerpt:"Alt du trenger aa vite om utstyr, klaer og forberedelser for turen til toppen.", category:"tips", date:"2026-03-20", readTime:"3 min", icon:"&#127890;" },
+  { id:6, title:"Kajakk i Bremangerfjorden", excerpt:"Opplev fjorden fra vannet. Guide til de beste kajakk-rutene og utleiemuligheter.", category:"natur", date:"2026-03-15", readTime:"7 min", icon:"&#127754;" },
+  { id:7, title:"Kystleden Bremanger", excerpt:"Vandre langs den vakre kystleden fra Kalvaag til Smørhamn. Detaljert turskildring.", category:"vandring", date:"2026-03-10", readTime:"10 min", icon:"&#9968;" },
+  { id:8, title:"Kulinariisk Helg i Bremanger", excerpt:"Planlegg en helg med matopplevelser. Fra tradisjonsmat til moderne kokekunst.", category:"mat", date:"2026-03-05", readTime:"5 min", icon:"&#127860;" },
+  { id:9, title:"Fotografering paa Hornelen", excerpt:"Tips til aa faa de beste bildene fra toppen og langs ruten. Beste tidspunkt og vinkler.", category:"tips", date:"2026-02-28", readTime:"4 min", icon:"&#127748;" }
+];
+
+function renderArticles(filter) {
+  const stored = JSON.parse(localStorage.getItem('vh_articles') || 'null');
+  const articles = stored || defaultArticles;
+  const grid = document.getElementById('articles-grid');
+  const filtered = filter === 'all' ? articles : articles.filter(a => a.category === filter);
+  grid.innerHTML = filtered.map(a => `
+    <div class="card article-card" data-category="${a.category}">
+      <div class="card-img">${a.icon || '&#128196;'}</div>
+      <div class="card-body">
+        <span class="tag">${a.category.charAt(0).toUpperCase() + a.category.slice(1)}</span>
+        <h3>${a.title}</h3>
+        <p>${a.excerpt}</p>
+        <div class="card-meta">${new Date(a.date).toLocaleDateString('no-NO', {day:'numeric',month:'long',year:'numeric'})} &middot; ${a.readTime} lesing</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderArticles(btn.dataset.filter);
+  });
+});
+
+renderArticles('all');
+</script>
+</body>
+</html>
